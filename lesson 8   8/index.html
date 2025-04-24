@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Картинки спортивных полей</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .carousel {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 80vh;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: #fff;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        .image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .description {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            font-size: 18px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1;
+            border-radius: 50%;
+        }
+
+        .arrow.left {
+            left: 10px;
+        }
+
+        .arrow.right {
+            right: 10px;
+        }
+
+        /* Индикаторы */
+        .indicators {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .indicator {
+            width: 15px;
+            height: 15px;
+            background: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: #333;
+            transform: scale(1.2);
+        }
+
+        .indicator:hover {
+            background: #888;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .carousel {
+                height: 200px;
+            }
+
+            .image {
+                height: 200px;
+            }
+
+            .arrow {
+                font-size: 24px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="carousel" id="carousel">
+    <div class="image-container">
+        <img class="image" id="image" src="" alt="Спортивное поле" />
+        <div class="description" id="description"></div>
+    </div>
+</div>
+<button class="arrow left" onclick="prev()">&#10094;</button>
+<button class="arrow right" onclick="next()">&#10095;</button>
+
+
+<div class="indicators" id="indicators"></div>
+
+<script>
+
+    const images = [
+        {
+         src: "images/football_field.jpg"
+        },
+        {
+            src: "images/football_field.jpg",
+
+        },
+        {
+            src: "images/tennis_court.jpg",
+
+        },
+        {
+            src: "images/basketball_court.jpg",
+
+        }
+    ];
+
+    let currentIndex = 0;
+    const imageElement = document.getElementById('image');
+    const descriptionElement = document.getElementById('description');
+    const indicatorsContainer = document.getElementById('indicators');
+
+    function updateCarousel() {
+        imageElement.src = images[currentIndex].src;
+        descriptionElement.textContent = images[currentIndex].description;
+
+
+        const indicators = document.querySelectorAll('.indicator');
+        indicators.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+        });
+    }
+
+
+    function createIndicators() {
+        for (let i = 0; i < images.length; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('indicator');
+            dot.setAttribute('data-index', i);
+            dot.onclick = () => {
+                currentIndex = i;
+                updateCarousel();
+            };
+            if (i === 0) dot.classList.add('active');
+            indicatorsContainer.appendChild(dot);
+        }
+    }
+
+    function next() {
+        currentIndex = (currentIndex + 1) % images.length;
+        updateCarousel();
+    }
+
+    function prev() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        updateCarousel();
+    }
+
+
+    createIndicators();
+    updateCarousel();
+</script>
+</body>
+</html>
